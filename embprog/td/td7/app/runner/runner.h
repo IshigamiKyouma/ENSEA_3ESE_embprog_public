@@ -44,6 +44,8 @@ typedef struct {
 
     uint32_t next_tick_ms; /* echeance du prochain tick (sans derive) */
 
+    obstacle_t o;
+
     app_timers_t *timers;
     int timer_id;
 } runner_t;

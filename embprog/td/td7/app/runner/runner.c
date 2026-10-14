@@ -14,6 +14,7 @@ static void runner_reset_game(runner_t *r, uint32_t seed) {
     dino_init(&r->dino);
     r->ticks = 0;
     r->rng = seed;
+    obstacle_init(&r->o);
     /* TODO : remettre a zero tout ce que vous ajouterez a runner_t
      * (obstacles, score, vitesse...). */
 }
@@ -36,7 +37,7 @@ void runner_enter(runner_t *r, bsp_t *bsp) {
 static void runner_tick(runner_t *r) {
     r->ticks++;
     dino_update(&r->dino);
-
+    obstacle_update(&r->o, 3);
     /* TODO etape 2 : faire defiler l'obstacle (et le faire reapparaitre).
      * TODO etape 3 : detecter la collision -> GAME_OVER.
      * TODO etape 4 : pool d'obstacles, generation aleatoire.
@@ -97,6 +98,7 @@ void runner_draw(const runner_t *r, bsp_t *bsp) {
 
     bsp->oled_fill_rect(bsp, 0, GROUND_Y, 128, 1, true);
     dino_draw(&r->dino, bsp, GROUND_Y, r->ticks);
+    obstacle_draw(&r->o, bsp, GROUND_Y);
 
     /* TODO : dessiner obstacles, score, ecran GAME OVER... */
 

@@ -9,11 +9,13 @@
 #define TD3_COMPLETE_APP_APP_H_
 
 #include "bsp.h"
+#include "menu.h"
+#include <stdio.h>
 
 typedef struct {
-	bsp_t * bsp;
-	uint32_t last_tick;
-	bool led1_on, led2_on, led3_on;
+	bsp_t *bsp;
+	menu_t menu;
+	bool led_on[3];
 } app_t;
 
 void app_init(app_t *app, bsp_t *bsp);

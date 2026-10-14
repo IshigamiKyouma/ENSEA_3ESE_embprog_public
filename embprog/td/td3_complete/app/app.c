@@ -7,29 +7,18 @@
 
 #include "app.h"
 
+static const char *const LED_LABELS[3] = {"LED1", "LED2", "LED3"};
+
 void app_init(app_t *app, bsp_t *bsp) {
-	app->last_tick = 0;
-	app->led1_on = false;
-	app->led2_on = false;
-	app->led3_on = false;
 	app->bsp = bsp;
+	menu_init(&app->menu);
+	for (int i = 0; i < 3; i++) {
+		app->led_on[i] = false;
+		menu_entry_t entry = { LED_LABELS[i], &app->led_on[i], (uint8_t)i };
+		menu_add_entry(&app->menu, entry);
+	}
 }
-
 void app_process(app_t *app) {
-	bsp_t * bsp = app->bsp;
-
-	uint32_t tick = bsp->get_tick_ms(bsp);
-	if (tick - app->last_tick >= 250) {
-		app->last_tick = tick;
-		app->led1_on = !app->led1_on;
-		bsp->led_set(bsp, 0, app->led1_on);
-	}
-	if (bsp->sw1_pressed(bsp)) {
-		app->led2_on = !app->led2_on;
-		bsp->led_set(bsp, 1, app->led2_on);
-	}
-	if (bsp->sw2_pressed(bsp)) {
-		app->led3_on = !app->led3_on;
-		bsp->led_set(bsp, 2, app->led3_on);
-	}
+	menu_process(&app->menu, app->bsp);
+	menu_draw(&app->menu, app->bsp);
 }

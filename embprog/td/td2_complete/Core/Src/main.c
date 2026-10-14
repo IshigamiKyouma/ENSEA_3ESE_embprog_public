@@ -28,6 +28,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdbool.h>
+#include "bsp.h"
+#include "app.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -62,16 +64,16 @@ void SystemClock_Config(void);
 static volatile bool sw1_pressed = false;
 static volatile bool sw2_pressed = false;
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-	switch (GPIO_Pin) {
-	case BTN_SW1_Pin:
-		sw1_pressed = true;
-		break;
-	case BTN_SW2_Pin:
-		sw2_pressed = true;
-		break;
-	}
-}
+//void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
+//	switch (GPIO_Pin) {
+//	case BTN_SW1_Pin:
+//		sw1_pressed = true;
+//		break;
+//	case BTN_SW2_Pin:
+//		sw2_pressed = true;
+//		break;
+//	}
+//}
 /* USER CODE END 0 */
 
 /**
@@ -110,28 +112,15 @@ int main(void)
 	MX_USART2_UART_Init();
 	MX_SPI1_Init();
 	/* USER CODE BEGIN 2 */
-
+	bsp_init();
+	app_t app;
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
-	uint32_t last_tick = 0;
 	while (1) {
-		uint32_t tick = HAL_GetTick();
-		if (last_tick != tick) {
-			last_tick = tick;
-			if (0 == (tick % LED_BLINK_PERIOD)) {
-				HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
-			}
-		}
-		if (sw1_pressed) {
-			sw1_pressed = false;
-			HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);
-		}
-		if (sw2_pressed) {
-			sw2_pressed = false;
-			HAL_GPIO_TogglePin(LED3_GPIO_Port, LED3_Pin);
-		}
+		bsp_process();
+		app_process(&app);
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */

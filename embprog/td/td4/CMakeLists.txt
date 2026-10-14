@@ -47,6 +47,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     bsp/bsp.c
     app/app.c
+    app/menu.c
     Drivers/drv_bidule/ssd1306/ssd1306_fonts.c
     Drivers/drv_bidule/ssd1306/ssd1306.c
 )
